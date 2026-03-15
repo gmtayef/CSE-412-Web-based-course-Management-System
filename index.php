@@ -17,7 +17,7 @@ $user_id = $_SESSION['user_id'] ?? 0;
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; }
         
-        /* Glass Navigation Effect */
+        
         .glass-nav {
            background: rgba(255, 255, 255, 0.1);
            backdrop-filter: blur(10px);
@@ -26,7 +26,7 @@ $user_id = $_SESSION['user_id'] ?? 0;
            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
 
-        /* Course Cards */
+       
         .course-card {
             background: linear-gradient(145deg, #111111, #1a1a1a);
             border: 1px solid #2a2a2a;
@@ -156,7 +156,7 @@ $user_id = $_SESSION['user_id'] ?? 0;
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <?php
-                // Fetch up to 3 courses for the home page showcase
+             
                 $select_products = mysqli_query($conn, "SELECT p.*, i.name as instructor_name FROM `products` p LEFT JOIN `course_activity` ca ON p.id = ca.course_id LEFT JOIN `instructors` i ON ca.instructor_id = i.id LIMIT 3");
                 
                 if($select_products && mysqli_num_rows($select_products) > 0){
