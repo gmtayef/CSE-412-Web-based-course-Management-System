@@ -1,0 +1,41 @@
+
+.course-section {
+    margin-top: 30px;
+}
+
+.course-section h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.curriculum-list {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.reviews {
+    display: flex;
+    flex-direction: column;
+}
+
+.review {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.reviewer {
+    font-style: italic;
+    color: #888;
+}
+
+video {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+.enroll-button {
+    
+    background-color: #0056b3;
+}
