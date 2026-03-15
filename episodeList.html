@@ -1,0 +1,60 @@
+<?php
+include 'config.php';
+session_start();
+
+if (!isset($_GET['id'])) {
+    die("Course ID not provided.");
+}
+
+$course_id = intval($_GET['id']);
+$course_query = "SELECT * FROM products WHERE id = $course_id";
+$course_result = mysqli_query($conn, $course_query);
+if (!$course_result || mysqli_num_rows($course_result) == 0) {
+    die("Invalid course ID.");
+}
+$course = mysqli_fetch_assoc($course_result);
+
+$episode_query = "SELECT * FROM episode WHERE course_id = $course_id ORDER BY e_id ASC";
+$result = mysqli_query($conn, $episode_query);
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Episodes List</title>
+    <link rel="stylesheet" href="css/episode.css"> <!-- এখানেই নতুন CSS যুক্ত -->
+</head>
+<body>
+
+<header>
+    <h1 class="logo">🎓 Learn <span class="highlight">Skill</span></h1>
+</header>
+
+<div class="container">
+    <a class="btn-custom" href="myCourses.php">← Back to My Courses</a>
+    <h2 class="custom-text">📚 Episodes for: <?php echo htmlspecialchars($course['name']); ?></h2>
+
+    <?php if ($result && mysqli_num_rows($result) > 0): ?>
+        <?php while ($row = mysqli_fetch_assoc($result)): ?>
+            <div class="episode-card">
+                <div class="episode-header">
+                    <h3><?php echo htmlspecialchars($row['e_name']); ?></h3>
+                    <button class="like-btn" title="Like this episode">❤️</button>
+                </div>
+                <p><?php echo htmlspecialchars($row['e_description']); ?></p>
+
+                <?php if (strpos($row['e_path'], 'youtube.com') !== false): ?>
+                    <iframe width="100%" height="315" src="<?php echo htmlspecialchars($row['e_path']); ?>" frameborder="0" allowfullscreen></iframe>
+                <?php else: ?>
+                    <a class="watch-btn" href="<?php echo htmlspecialchars($row['e_path']); ?>" target="_blank">▶️ Watch Episode</a>
+                <?php endif; ?>
+            </div>
+        <?php endwhile; ?>
+    <?php else: ?>
+        <p class="new">No episodes found for this course.</p>
+    <?php endif; ?>
+</div>
+
+</body>
+</html>
