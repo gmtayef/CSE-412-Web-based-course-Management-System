@@ -17,7 +17,6 @@ $user_id = $_SESSION['user_id'] ?? 0;
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; }
         
-      
         .glass-nav {
            background: rgba(255, 255, 255, 0.1);
            backdrop-filter: blur(10px);
@@ -33,32 +32,39 @@ $user_id = $_SESSION['user_id'] ?? 0;
         }
     </style>
 </head>
-<body class="text-white">
+<body class="text-white relative">
 
-   <div class="relative z-10 container mx-auto px-4 h-full flex flex-col">
-            
-            <nav class="py-4 flex justify-between items-center glass-nav rounded-full mt-6 px-8 mx-2 md:mx-6">
+    <div class="absolute top-0 left-0 w-full z-50">
+        <div class="container mx-auto px-4">
+            <nav class="py-4 flex justify-between items-center glass-nav rounded-full mt-6 px-8 mx-2 md:mx-6 transition-colors duration-300">
                 <a href="index.php" class="text-1xl font-bold tracking-wide">BOT <span class="text-indigo-400">Learning</span></a>
                 
-                <ul class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-300">
-                    <li><a href="index.php" class="hover:text-white transition">Home</a></li>
-                    <li><a href="course-page.php" class="hover:text-white transition">Courses</a></li>
-                    <li><a href="instructors.php" class="hover:text-white transition">Instructors</a></li>
-                    <li><a href="about.php" class="text-white border-b-2 border-indigo-500 pb-1">About</a></li>
-                    <li><a href="contact.php" class="hover:text-white transition">Contact</a></li>
+                <ul class="hidden md:flex items-center space-x-8 text-md font-medium text-gray-300">
+                    <li><a href="index.php" class="hover:text-white pb-1 border-b-2 border-transparent hover:border-indigo-500 transition-all duration-300">Home</a></li>
+                    <li><a href="course-page.php" class="hover:text-white pb-1 border-b-2 border-transparent hover:border-indigo-500 transition-all duration-300">Courses</a></li>
+                    <li><a href="instructors.php" class="hover:text-white pb-1 border-b-2 border-transparent hover:border-indigo-500 transition-all duration-300">Instructors</a></li>
+                    <li><a href="about.php" class="text-white font-bold border-b-2 border-indigo-500 pb-1 transition-all duration-300">About</a></li>
+                    <li><a href="contact.php" class="hover:text-white pb-1 border-b-2 border-transparent hover:border-indigo-500 transition-all duration-300">Contact</a></li>
                 </ul>
 
-                <div class="flex items-center space-x-4">
-                    <?php if (isset($_SESSION['user_name']) || isset($_SESSION['admin_name']) || isset($_SESSION['instructor_name'])): ?>
-                         <a href="logout.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-full font-bold text-xs transition">Logout</a>
+                <div class="flex items-center space-x-6">
+                    <?php if (isset($_SESSION['admin_name'])): ?>
+                        <a href="admin_panel.php" class="hover:text-indigo-300 transition text-sm font-medium"><i class="fas fa-user-shield mr-1"></i> Admin</a>
+                        <a href="logout.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-full font-bold text-sm transition">Logout</a>
+                    <?php elseif (isset($_SESSION['instructor_name'])): ?>
+                        <a href="instructor_panel.php" class="hover:text-indigo-300 transition text-sm font-medium"><i class="fas fa-chalkboard-teacher mr-1"></i> Panel</a>
+                        <a href="logout.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-full font-bold text-sm transition">Logout</a>
+                    <?php elseif (isset($_SESSION['user_name'])): ?>
+                        <a href="student_panel.php" class="hover:text-indigo-300 transition text-sm font-medium"><i class="fas fa-user-graduate mr-1"></i> My Courses</a>
+                        <a href="logout.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-full font-bold text-sm transition">Logout</a>
                     <?php else: ?>
-                        <a href="login_form.php" class="hover:text-white text-sm font-medium transition">Login</a>
-                        <a href="register_form.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-6 rounded-full font-bold text-xs transition">Sign Up</a>
+                        <a href="login_form.php" class="hover:text-white font-medium transition">Login</a>
+                        <a href="register_form.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-6 rounded-full font-bold transition shadow-[0_0_15px_rgba(79,70,229,0.3)]">Sign Up</a>
                     <?php endif; ?>
                 </div>
-            </div>
+            </nav>
         </div>
-    </nav>
+    </div>
 
     <header class="relative pt-40 pb-20 px-6 text-center">
         <h1 class="text-5xl md:text-3xl font-black mb-6">Who <span class="text-gradient">We Are</span></h1>
@@ -234,5 +240,17 @@ $user_id = $_SESSION['user_id'] ?? 0;
         </div>
     </footer>
 
+    <script>
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-black/80');
+                nav.classList.remove('glass-nav');
+            } else {
+                nav.classList.add('glass-nav');
+                nav.classList.remove('bg-black/80');
+            }
+        });
+    </script>
 </body>
 </html>
