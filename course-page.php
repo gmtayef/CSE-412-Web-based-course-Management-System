@@ -48,7 +48,7 @@ $select_products = mysqli_query($conn, $select_products_query);
     <style> 
         body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; } 
         
-        /* Glass Navigation Effect */
+       
         .glass-nav {
            background: rgba(255, 255, 255, 0.1);
            backdrop-filter: blur(10px);
@@ -57,7 +57,7 @@ $select_products = mysqli_query($conn, $select_products_query);
            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
 
-        /* Course Cards */
+     
         .course-card {
             background: linear-gradient(145deg, #111111, #1a1a1a);
             border: 1px solid #2a2a2a;
@@ -69,44 +69,41 @@ $select_products = mysqli_query($conn, $select_products_query);
         }
     </style>
 </head>
-<body class="text-white">
+<body class="text-white relative">
 
-    <div class="sticky top-4 z-50 container mx-auto px-4">
-        <nav class=" py-4 flex justify-between items-center glass-nav rounded-full px-8">
-            <a href="index.php" class="text-1xl font-bold tracking-wide">BOT <span class="text-indigo-400">Learning</span></a>
-            
-            <ul class="hidden md:flex items-center space-x-8 text-md font-medium text-gray-300">
-                <li><a href="index.php" class="hover:text-white pb-1 border-b-2 border-transparent hover:border-indigo-500 transition-all duration-300">Home</a></li>
+    <div class="absolute top-0 left-0 w-full z-50">
+        <div class="container mx-auto px-4">
+            <nav class="py-4 flex justify-between items-center glass-nav rounded-full mt-6 px-8 mx-2 md:mx-6 transition-colors duration-300">
+                <a href="index.php" class="text-1xl font-bold tracking-wide">BOT <span class="text-indigo-400">Learning</span></a>
                 
-                <li><a href="course-page.php" class="text-white font-bold border-b-2 border-indigo-500 pb-1 transition-all duration-300">Courses</a></li>
-                
-                <li><a href="instructors.php" class="hover:text-white pb-1 border-b-2 border-transparent hover:border-indigo-500 transition-all duration-300">Instructors</a></li>
-                <li><a href="about.php" class="hover:text-white pb-1 border-b-2 border-transparent hover:border-indigo-500 transition-all duration-300">About</a></li>
-                <li><a href="contact.php" class="hover:text-white pb-1 border-b-2 border-transparent hover:border-indigo-500 transition-all duration-300">Contact</a></li>
-            </ul>
+                <ul class="hidden md:flex items-center space-x-8 text-md font-medium text-gray-300">
+                    <li><a href="index.php" class="hover:text-white pb-1 border-b-2 border-transparent hover:border-indigo-500 transition-all duration-300">Home</a></li>
+                    <li><a href="course-page.php" class="text-white font-bold border-b-2 border-indigo-500 pb-1 transition-all duration-300">Courses</a></li>
+                    <li><a href="instructors.php" class="hover:text-white pb-1 border-b-2 border-transparent hover:border-indigo-500 transition-all duration-300">Instructors</a></li>
+                    <li><a href="about.php" class="hover:text-white pb-1 border-b-2 border-transparent hover:border-indigo-500 transition-all duration-300">About</a></li>
+                    <li><a href="contact.php" class="hover:text-white pb-1 border-b-2 border-transparent hover:border-indigo-500 transition-all duration-300">Contact</a></li>
+                </ul>
 
-            <div class="flex items-center space-x-6">
-                <?php if (isset($_SESSION['admin_name'])): ?>
-                    <a href="admin_panel.php" class="hover:text-indigo-300 transition text-sm font-medium"><i class="fas fa-user-shield mr-1"></i> Admin</a>
-                    <a href="logout.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-full font-bold text-sm transition">Logout</a>
-                
-                <?php elseif (isset($_SESSION['instructor_name'])): ?>
-                    <a href="instructor_panel.php" class="hover:text-indigo-300 transition text-sm font-medium"><i class="fas fa-chalkboard-teacher mr-1"></i> Panel</a>
-                    <a href="logout.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-full font-bold text-sm transition">Logout</a>
-                
-                <?php elseif (isset($_SESSION['user_name'])): ?>
-                    <a href="student_panel.php" class="hover:text-indigo-300 transition text-sm font-medium"><i class="fas fa-user-graduate mr-1"></i> My Courses</a>
-                    <a href="logout.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-full font-bold text-sm transition">Logout</a>
-                
-                <?php else: ?>
-                    <a href="login_form.php" class="hover:text-white font-medium transition">Login</a>
-                    <a href="register_form.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-6 rounded-full font-bold transition shadow-[0_0_15px_rgba(79,70,229,0.3)]">Sign Up</a>
-                <?php endif; ?>
-            </div>
-        </nav>
+                <div class="flex items-center space-x-6">
+                    <?php if (isset($_SESSION['admin_name'])): ?>
+                        <a href="admin_panel.php" class="hover:text-indigo-300 transition text-sm font-medium"><i class="fas fa-user-shield mr-1"></i> Admin</a>
+                        <a href="logout.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-full font-bold text-sm transition">Logout</a>
+                    <?php elseif (isset($_SESSION['instructor_name'])): ?>
+                        <a href="instructor_panel.php" class="hover:text-indigo-300 transition text-sm font-medium"><i class="fas fa-chalkboard-teacher mr-1"></i> Panel</a>
+                        <a href="logout.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-full font-bold text-sm transition">Logout</a>
+                    <?php elseif (isset($_SESSION['user_name'])): ?>
+                        <a href="student_panel.php" class="hover:text-indigo-300 transition text-sm font-medium"><i class="fas fa-user-graduate mr-1"></i> My Courses</a>
+                        <a href="logout.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-full font-bold text-sm transition">Logout</a>
+                    <?php else: ?>
+                        <a href="login_form.php" class="hover:text-white font-medium transition">Login</a>
+                        <a href="register_form.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-6 rounded-full font-bold transition shadow-[0_0_15px_rgba(79,70,229,0.3)]">Sign Up</a>
+                    <?php endif; ?>
+                </div>
+            </nav>
+        </div>
     </div>
 
-    <header class="relative bg-cover bg-center h-[50vh] mt-[-88px]" style="background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80');">
+    <header class="relative bg-cover bg-center h-[50vh]" style="background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80');">
         <div class="absolute inset-0 bg-black/70"></div>
         <div class="relative z-10 container mx-auto px-4 h-full flex flex-col justify-center items-center text-center text-white pt-20">
             <h1 class="text-5xl md:text-2xl font-black mb-4">Explore Our <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Courses</span></h1>
@@ -174,5 +171,17 @@ $select_products = mysqli_query($conn, $select_products_query);
         </div>
     </footer>
 
+    <script>
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-black/80');
+                nav.classList.remove('glass-nav');
+            } else {
+                nav.classList.add('glass-nav');
+                nav.classList.remove('bg-black/80');
+            }
+        });
+    </script>
 </body>
 </html>
