@@ -1,8 +1,6 @@
 <?php
-// Turn on error reporting to stop the "blank white screen"
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
+error_reporting(0);
+mysqli_report(MYSQLI_REPORT_OFF);
 @include 'config.php';
 session_start();
 
@@ -11,34 +9,64 @@ if (!isset($_SESSION['user_name'])) {
     exit();
 }
 
-$user_id = $_SESSION['user_id'] ?? 0;
-$message = '';
+$student_name = $_SESSION['user_name'];
+$student_email = $_SESSION['user_email'] ?? '';
+$session_id = intval($_SESSION['id'] ?? $_SESSION['user_id'] ?? 0);
 
-$cart_count_query = mysqli_query($conn, "SELECT COUNT(*) as count FROM cart WHERE user_id = '$user_id'");
-$cart_count_data = mysqli_fetch_assoc($cart_count_query);
+$valid_ids = [];
+if ($session_id > 0) {
+    $valid_ids[] = $session_id;
+}
+
+$query_condition = !empty($student_email) ? "email = '$student_email'" : "name = '$student_name'";
+
+$check_user = @mysqli_query($conn, "SELECT id FROM user_form WHERE $query_condition");
+if ($check_user && mysqli_num_rows($check_user) > 0) {
+    while ($row = mysqli_fetch_assoc($check_user)) {
+        $valid_ids[] = $row['id'];
+    }
+}
+
+$check_old = @mysqli_query($conn, "SELECT id FROM students WHERE $query_condition");
+if ($check_old && mysqli_num_rows($check_old) > 0) {
+    while ($row = mysqli_fetch_assoc($check_old)) {
+        $valid_ids[] = $row['id'];
+    }
+}
+
+$valid_ids = array_values(array_unique(array_filter($valid_ids)));
+if (empty($valid_ids)) {
+    $valid_ids[] = $session_id > 0 ? $session_id : 0; 
+}
+$id_list = implode("','", $valid_ids);
+$primary_user_id = $valid_ids[0];
+
+$message = '';
+$cart_count_query = @mysqli_query($conn, "SELECT COUNT(*) as count FROM cart WHERE user_id IN ('$id_list')");
+$cart_count_data = $cart_count_query ? mysqli_fetch_assoc($cart_count_query) : ['count' => 0];
 $cart_count = $cart_count_data['count'] ?? 0;
 
-
 if (isset($_POST['submit_assignment'])) {
-    $assignment_id = $_POST['assignment_id'];
+    $assignment_id = mysqli_real_escape_string($conn, $_POST['assignment_id']);
     $file_name = $_FILES['assignment_file']['name'];
     $file_tmp = $_FILES['assignment_file']['tmp_name'];
-    
     
     if (!is_dir('uploaded_assignments')) {
         mkdir('uploaded_assignments', 0777, true);
     }
-    
-    $file_folder = 'uploaded_assignments/' . time() . '_' . $file_name;
-
+    $clean_file_name = preg_replace("/[^a-zA-Z0-9.]/", "_", $file_name);
+    $file_folder = 'uploaded_assignments/' . time() . '_' . $clean_file_name;
     if (!empty($file_name)) {
         if (move_uploaded_file($file_tmp, $file_folder)) {
-            $message = "Assignment submitted successfully!";
+            $insert_submission = mysqli_query($conn, "INSERT INTO submissions (assignment_id, user_id, file_path, status) VALUES ('$assignment_id', '$primary_user_id', '$file_folder', 'Pending')");
+            if ($insert_submission) {
+                $message = "success|Assignment submitted successfully!";
+            } else {
+                $message = "error|Failed to save submission to the database.";
+            }
         } else {
-            $message = "Failed to upload file. Check folder permissions.";
+            $message = "error|Failed to upload file.";
         }
-    } else {
-        $message = "Please select a file to upload.";
     }
 }
 ?>
@@ -47,108 +75,186 @@ if (isset($_POST['submit_assignment'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assignments - BOT</title>
+    <title>Assignments | BOT STUDENT</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style> body { font-family: 'Inter', sans-serif; } </style>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: radial-gradient(circle at top right, #1e1b4b, #0f172a); }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        input[type="file"]::file-selector-button { transition: all 0.2s ease-in-out; }
+        
+        .refined-menu { width: 240px; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
+        .refined-menu h3 { font-size: 0.75rem; font-weight: 700; margin: 16px 0 8px 0; padding: 0 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
+        .refined-menu ul { list-style: none; padding: 0; margin: 0 0 16px 0; }
+        .refined-menu ul:last-child { margin-bottom: 0; }
+        .refined-menu li { margin-bottom: 4px; }
+        .refined-menu a { display: flex; align-items: center; gap: 12px; padding: 10px 12px; color: #94a3b8; text-decoration: none; font-size: 0.875rem; font-weight: 600; border-radius: 12px; transition: all 0.2s ease; }
+        .refined-menu a:hover { background-color: rgba(30, 41, 59, 0.8); color: #f8fafc; }
+        .refined-menu a.active { background-color: #6366f1; color: #ffffff; box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.25); }
+    </style>
 </head>
-<body class="bg-[#0f172a] text-white flex h-screen overflow-hidden">
-
-    <aside class="w-64 bg-[#1e293b] flex flex-col border-r border-slate-800 shadow-xl z-10 shrink-0">
-        <div class="p-6 border-b border-slate-800">
-            <h2 class="text-2xl font-bold tracking-tight">BOT <span class="text-[#6366f1]">Student</span></h2>
-        </div>
-
-        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-            <a href="student_panel.php" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg font-medium transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                My Courses
-            </a>
-            <a href="explore_courses.php" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg font-medium transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                Explore Courses
-            </a>
-            <a href="assignments.php" class="flex items-center gap-3 px-4 py-3 bg-[#6366f1] text-white rounded-lg font-medium shadow-sm transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                Assignments
-            </a>
-			 
-            <a href="messages.php" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg font-medium transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
-                Messages
-            </a>
-			 <a href="cart.php" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg font-medium transition-colors justify-between">
-                <div class="flex items-center gap-3">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                    My Cart
+<body class="text-slate-200 flex h-screen overflow-hidden selection:bg-indigo-500 selection:text-white">
+   <aside class="w-72 m-4 mr-0 rounded-[2rem] glass flex flex-col shadow-2xl z-20 border-r border-slate-800/50 shrink-0 h-[calc(100vh-2rem)]">
+        <div class="p-8 pb-4 shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                    <i class="fas fa-graduation-cap text-white text-lg"></i>
                 </div>
-				</a>
-                <?php if($cart_count > 0): ?>
-                    <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full"><?php echo $cart_count; ?></span>
-                <?php endif; ?>
-            </a>
-            <a href="index.php" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg font-medium transition-colors mt-4">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                View Site
-            </a>
+                <h2 class="text-2xl font-extrabold tracking-tight text-white">BOT<span class="text-indigo-400 text-sm ml-1 font-semibold tracking-wide">STUDENT</span></h2>
+            </div>
+        </div>
+        
+        <nav class="refined-menu flex-1 px-4 py-6 overflow-y-auto custom-scrollbar">
+            <?php 
+            $current_page = basename($_SERVER['PHP_SELF']);
+            $view_course_id = isset($_GET['course_id']) ? true : false;
+            ?>
+            <h3>Dashboard</h3>
+            <ul>
+                <li><a href="index.php" <?= $current_page == 'index.php' ? 'class="active"' : '' ?>><i class="fas fa-home w-5 text-center"></i> Home</a></li>
+                <li><a href="student_panel.php" <?= ($current_page == 'student_panel.php' && !$view_course_id) ? 'class="active"' : '' ?>><i class="fas fa-th-large w-5 text-center"></i> Dashboard</a></li>
+                <li><a href="explore_courses.php" <?= $current_page == 'explore_courses.php' ? 'class="active"' : '' ?>><i class="fas fa-compass w-5 text-center"></i> Explore</a></li>
+            </ul>
+            
+            <h3>Settings</h3>
+            <ul>
+                <li><a href="assignments.php" <?= $current_page == 'assignments.php' ? 'class="active"' : '' ?>><i class="fas fa-tasks w-5 text-center"></i> Assignments</a></li>
+                <li>
+                    <a href="cart.php" <?= $current_page == 'cart.php' ? 'class="active"' : '' ?>>
+                        <i class="fas fa-shopping-cart w-5 text-center"></i> My Cart
+                        <?php if(isset($cart_count) && $cart_count > 0): ?>
+                            <span class="bg-rose-500 text-white text-xs font-bold px-2 py-0.5 rounded-lg shadow-sm shadow-rose-500/20 ml-auto"><?= $cart_count ?></span>
+                        <?php endif; ?>
+                    </a>
+                </li>
+            </ul>
         </nav>
 
-        <div class="p-4 border-t border-slate-800">
-            <a href="logout.php" class="flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-slate-800 hover:text-red-300 rounded-lg font-medium transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                Logout
+        <div class="p-5 mt-auto shrink-0">
+            <div class="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50 mb-4 backdrop-blur-sm">
+                <p class="text-[10px] text-slate-500 font-bold mb-3 uppercase tracking-widest">Student Profile</p>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center font-bold text-white shadow-inner border border-white/10">
+                        <?= strtoupper(substr($_SESSION['user_name'] ?? 'U', 0, 1)) ?>
+                    </div>
+                    <div class="overflow-hidden">
+                        <p class="text-sm font-bold text-white truncate"><?= htmlspecialchars($_SESSION['user_name'] ?? 'User') ?></p>
+                        <p class="text-xs text-indigo-400 font-medium">Premium Member</p>
+                    </div>
+                </div>
+            </div>
+            <a href="logout.php" class="flex items-center gap-3 px-4 py-3 text-rose-400 hover:bg-rose-500/10 rounded-2xl transition-all font-semibold text-sm">
+                <i class="fas fa-power-off w-5 text-center"></i> Logout
             </a>
         </div>
     </aside>
-
-    <main class="flex-1 overflow-y-auto bg-[#0f172a] p-10">
-        <header class="mb-8">
-            <h1 class="text-3xl font-bold mb-2">My Assignments</h1>
-            <p class="text-slate-400 text-sm">Review your pending tasks and upload your completed files below.</p>
+    <main class="flex-1 overflow-y-auto p-8 lg:p-12 custom-scrollbar">
+        <header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+                <h1 class="text-4xl md:text-5xl font-black text-white mb-2 tracking-tighter">
+                    My <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Assignments</span>
+                </h1>
+                <p class="text-slate-400 font-medium text-lg">Track your tasks, submit work, and view grades.</p>
+            </div>
+            <div class="glass p-1.5 rounded-2xl flex gap-1.5 border border-slate-700/50 shadow-xl">
+                <div class="px-5 py-2.5 bg-slate-800/80 rounded-xl text-center">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">Tasks</p>
+                    <p class="text-sm font-extrabold text-rose-400 flex items-center justify-center gap-1.5"><i class="fas fa-clock text-xs"></i> Pending Review</p>
+                </div>
+            </div>
         </header>
 
-        <?php if ($message != ''): ?>
-            <div class="mb-6 p-4 rounded-lg <?php echo strpos($message, 'success') !== false ? 'bg-green-500/10 border-green-500/50 text-green-400' : 'bg-red-500/10 border-red-500/50 text-red-400'; ?> border">
-                <?php echo $message; ?>
+        <?php if ($message != ''): 
+            $msg_parts = explode('|', $message);
+            $type = $msg_parts[0];
+            $text = $msg_parts[1] ?? $message;
+        ?>
+            <div class="glass border-l-4 <?php echo $type === 'success' ? 'border-emerald-500' : 'border-rose-500'; ?> rounded-2xl p-4 mb-8 shadow-lg flex items-center gap-3">
+                <i class="fas <?php echo $type === 'success' ? 'fa-check-circle text-emerald-500' : 'fa-exclamation-circle text-rose-500'; ?> text-xl"></i>
+                <p class="text-slate-200 font-medium"><?php echo htmlspecialchars($text); ?></p>
             </div>
         <?php endif; ?>
 
-        <div class="space-y-6">
-            
-            <div class="bg-[#1e293b] rounded-xl shadow-lg border border-slate-700 p-6 flex flex-col md:flex-row gap-6 items-start">
-                <div class="flex-1">
-                    <div class="flex items-center gap-3 mb-2">
-                        <span class="text-xs font-semibold px-2.5 py-1 bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 rounded-full">Pending</span>
-                        <span class="text-sm font-medium text-slate-400">Web Development Bootcamp</span>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-2">Build a Personal Portfolio</h3>
-                    <p class="text-slate-400 text-sm mb-4">Create a responsive personal portfolio using HTML, CSS, and basic JavaScript. Make sure to include an "About Me", "Projects", and "Contact" section. Zip your files before uploading.</p>
-                </div>
-
-                <div class="w-full md:w-72 bg-[#0f172a] p-5 rounded-lg border border-slate-800 shrink-0">
-                    <h4 class="text-sm font-semibold text-white mb-3">Submit your work</h4>
-                    <form action="" method="POST" enctype="multipart/form-data" class="flex flex-col gap-3">
-                        <input type="hidden" name="assignment_id" value="1">
-                        
-                        <label class="block">
-                            <span class="sr-only">Choose file</span>
-                            <input type="file" name="assignment_file" required class="block w-full text-sm text-slate-400
-                                file:mr-4 file:py-2 file:px-4
-                                file:rounded-lg file:border-0
-                                file:text-sm file:font-semibold
-                                file:bg-[#6366f1] file:text-white
-                                hover:file:bg-indigo-500 file:cursor-pointer file:transition-colors
-                                border border-slate-700 rounded-lg bg-[#1e293b]">
-                        </label>
-                        
-                        <button type="submit" name="submit_assignment" class="w-full bg-[#6366f1] text-white py-2 rounded-lg text-sm font-medium hover:bg-indigo-500 transition-colors">
-                            Upload Assignment
-                        </button>
-                    </form>
-                </div>
+        <?php
+        $assignments_query = "SELECT a.*, p.name as course_name, s.status, s.grade 
+                              FROM assignments a 
+                              JOIN products p ON a.course_id = p.id 
+                              JOIN enrollments e ON p.id = e.course_id 
+                              LEFT JOIN submissions s ON a.id = s.assignment_id AND s.user_id IN ('$id_list')
+                              WHERE e.user_id IN ('$id_list')";
+        $assignments_result = @mysqli_query($conn, $assignments_query);
+        
+        if ($assignments_result && mysqli_num_rows($assignments_result) > 0) {
+            while ($assignment = mysqli_fetch_assoc($assignments_result)) {
+        ?>
+        <div class="glass border border-slate-700/50 rounded-3xl p-8 mb-6 shadow-xl relative overflow-hidden group hover:border-indigo-500/30 transition-all duration-300">
+            <div class="absolute top-0 right-0 p-8">
+                <?php if ($assignment['status'] == 'Pending'): ?>
+                    <span class="bg-amber-500/10 text-amber-400 px-4 py-2 rounded-xl text-xs font-bold border border-amber-500/20 shadow-lg shadow-amber-500/10 flex items-center gap-2">
+                        <i class="fas fa-hourglass-half"></i> Under Review
+                    </span>
+                <?php elseif ($assignment['status'] == 'Graded'): ?>
+                    <span class="bg-emerald-500/10 text-emerald-400 px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/20 shadow-lg shadow-emerald-500/10 flex items-center gap-2">
+                        <i class="fas fa-check-double"></i> Graded: <?php echo htmlspecialchars($assignment['grade']); ?>
+                    </span>
+                <?php else: ?>
+                    <span class="bg-rose-500/10 text-rose-400 px-4 py-2 rounded-xl text-xs font-bold border border-rose-500/20 shadow-lg shadow-rose-500/10 flex items-center gap-2">
+                        <i class="fas fa-exclamation"></i> Not Submitted
+                    </span>
+                <?php endif; ?>
             </div>
 
+            <div class="max-w-2xl">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
+                        <i class="fas fa-book text-indigo-400 text-sm"></i>
+                    </div>
+                    <p class="text-indigo-400 font-bold text-sm tracking-wide uppercase"><?php echo htmlspecialchars($assignment['course_name']); ?></p>
+                </div>
+                
+                <h3 class="text-2xl font-bold text-white mb-3 tracking-tight"><?php echo htmlspecialchars($assignment['title']); ?></h3>
+                <p class="text-slate-400 leading-relaxed mb-8"><?php echo nl2br(htmlspecialchars($assignment['description'])); ?></p>
+                
+                <?php if (!$assignment['status']): ?>
+                    <form method="post" enctype="multipart/form-data" class="mt-6 space-y-4 max-w-md">
+                        <input type="hidden" name="assignment_id" value="<?php echo $assignment['id']; ?>">
+                        
+                        <label class="block relative group cursor-pointer">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                                <i class="fas fa-cloud-upload-alt text-slate-400 group-hover:text-indigo-400 transition-colors"></i>
+                            </div>
+                            <input type="file" name="assignment_file" required 
+                                class="block w-full text-sm text-slate-400 
+                                file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 
+                                file:text-sm file:font-bold file:bg-indigo-500 file:text-white 
+                                hover:file:bg-indigo-400 file:transition-all file:cursor-pointer
+                                border border-slate-700/50 rounded-xl bg-slate-900/50 
+                                hover:border-indigo-500/50 transition-all cursor-pointer">
+                        </label>
+
+                        <button type="submit" name="submit_assignment" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-3.5 rounded-xl text-sm font-bold uppercase tracking-wider transition-all shadow-lg shadow-indigo-600/20 transform active:scale-95 flex items-center justify-center gap-2">
+                            Upload File <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                <?php endif; ?>
+            </div>
         </div>
+        <?php
+            }
+        } else {
+            echo '
+            <div class="glass border border-slate-700/50 rounded-[2rem] p-16 text-center shadow-xl max-w-2xl mx-auto mt-10">
+                <div class="w-20 h-20 bg-slate-800/50 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-700">
+                    <i class="fas fa-check-double text-3xl text-emerald-500/50"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-2">You\'re all caught up!</h3>
+                <p class="text-slate-400">No assignments are currently pending for your enrolled courses.</p>
+            </div>';
+        }
+        ?>
     </main>
 </body>
 </html>
