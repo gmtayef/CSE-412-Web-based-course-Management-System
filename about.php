@@ -145,9 +145,9 @@ $user_id = $_SESSION['user_id'] ?? 0;
                 <div class="p-6 text-center">
                     <h3 class="text-xl font-bold mb-1">David Miller</h3>
                     <p class="text-gray-500 text-sm mb-4">Project Manager</p>
-                    <div class="flex justify-center space-x-4">
+                     <div class="flex justify-center space-x-4">
                         <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github"></i></a>
                     </div>
                 </div>
             </div>
@@ -173,9 +173,9 @@ $user_id = $_SESSION['user_id'] ?? 0;
                 <div class="p-6 text-center">
                     <h3 class="text-xl font-bold mb-1">Rakib Hassan</h3>
                     <p class="text-gray-500 text-sm mb-4">UI/UX Designer</p>
-                    <div class="flex justify-center space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-dribbble"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                     <div class="flex justify-center space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github"></i></a>
                     </div>
                 </div>
             </div>
