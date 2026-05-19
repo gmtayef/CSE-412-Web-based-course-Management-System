@@ -15,9 +15,7 @@ $user_id = $_SESSION['user_id'] ?? 0;
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/b67581ec1b.js" crossorigin="anonymous"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; }
-        
-        
+        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; }           
         .glass-nav {
            background: rgba(255, 255, 255, 0.1);
            backdrop-filter: blur(10px);
@@ -25,13 +23,10 @@ $user_id = $_SESSION['user_id'] ?? 0;
            border: 1px solid rgba(255, 255, 255, 0.1);
            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
-
-       
         .course-card {
             background: linear-gradient(145deg, #111111, #1a1a1a);
             border: 1px solid #2a2a2a;
-        }
-        
+        }      
         .course-card:hover {
             border-color: #4f46e5;
             box-shadow: 0 10px 30px -10px rgba(79, 70, 229, 0.3);
@@ -45,9 +40,7 @@ $user_id = $_SESSION['user_id'] ?? 0;
         }
     </style>
 </head>
-
 <body class="text-white">
-
     <header class="relative h-[80vh] overflow-hidden"> 
         <div class="absolute inset-0 z-0">
             <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop" 
@@ -55,41 +48,32 @@ $user_id = $_SESSION['user_id'] ?? 0;
                  class="w-full h-full object-cover" />
             <div class="absolute inset-0 bg-black/70"></div>
         </div>
-
-        <div class="relative z-10 container mx-auto px-4 h-full flex flex-col">
-            
+        <div class="relative z-10 container mx-auto px-4 h-full flex flex-col">           
             <nav class="py-4 flex justify-between items-center glass-nav rounded-full mt-6 px-8 mx-2 md:mx-6 transition-colors duration-300">
-                <a href="index.php" class="text-1xl font-bold tracking-wide">BOT <span class="text-indigo-400">Learning</span></a>
-                
+                <a href="index.php" class="text-1xl font-bold tracking-wide">BOT <span class="text-indigo-400">Learning</span></a>                
                 <ul class="hidden md:flex items-center space-x-8 text-md font-medium text-gray-300">
-                    <li><a href="index.php" class="text-white font-bold border-b-2 border-indigo-500 pb-1 transition-all duration-300">Home</a></li>
-                    
+                    <li><a href="index.php" class="text-white font-bold border-b-2 border-indigo-500 pb-1 transition-all duration-300">Home</a></li>                    
                     <li><a href="course-page.php" class="hover:text-white pb-1 border-b-2 border-transparent hover:border-indigo-500 transition-all duration-300">Courses</a></li>
                     <li><a href="instructors.php" class="hover:text-white pb-1 border-b-2 border-transparent hover:border-indigo-500 transition-all duration-300">Instructors</a></li>
                     <li><a href="about.php" class="hover:text-white pb-1 border-b-2 border-transparent hover:border-indigo-500 transition-all duration-300">About</a></li>
                     <li><a href="contact.php" class="hover:text-white pb-1 border-b-2 border-transparent hover:border-indigo-500 transition-all duration-300">Contact</a></li>
                 </ul>
-
                 <div class="flex items-center space-x-6">
                     <?php if (isset($_SESSION['admin_name'])): ?>
                         <a href="admin_panel.php" class="hover:text-indigo-300 transition text-sm font-medium"><i class="fas fa-user-shield mr-1"></i> Admin</a>
-                        <a href="logout.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-full font-bold text-sm transition">Logout</a>
-                    
+                        <a href="logout.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-full font-bold text-sm transition">Logout</a>                 
                     <?php elseif (isset($_SESSION['instructor_name'])): ?>
                         <a href="instructor_panel.php" class="hover:text-indigo-300 transition text-sm font-medium"><i class="fas fa-chalkboard-teacher mr-1"></i> Panel</a>
-                        <a href="logout.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-full font-bold text-sm transition">Logout</a>
-                    
+                        <a href="logout.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-full font-bold text-sm transition">Logout</a>        
                     <?php elseif (isset($_SESSION['user_name'])): ?>
                         <a href="student_panel.php" class="hover:text-indigo-300 transition text-sm font-medium"><i class="fas fa-user-graduate mr-1"></i> My Courses</a>
-                        <a href="logout.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-full font-bold text-sm transition">Logout</a>
-                    
+                        <a href="logout.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-full font-bold text-sm transition">Logout</a>                    
                     <?php else: ?>
                         <a href="login_form.php" class="hover:text-white font-medium transition">Login</a>
                         <a href="register_form.php" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-6 rounded-full font-bold transition shadow-[0_0_15px_rgba(79,70,229,0.3)]">Sign Up</a>
                     <?php endif; ?>
                 </div>
             </nav>
-
             <div class="flex-1 flex flex-col justify-center items-center text-center mt-[-40px]">
                 <div class="max-w-3xl mx-auto">
                     <h1 class="text-5xl md:text-6xl lg:text-3xl font-black mb-6 leading-tight tracking-tight">
@@ -111,7 +95,6 @@ $user_id = $_SESSION['user_id'] ?? 0;
 
         </div>
     </header>
-
     <section id="features" class="py-20 relative z-10 -mt-10">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -121,8 +104,7 @@ $user_id = $_SESSION['user_id'] ?? 0;
                     </div>
                     <h3 class="text-xl font-bold mb-3 text-white">Expert-Led Courses</h3>
                     <p class="text-gray-400 text-sm leading-relaxed">Learn from industry professionals with years of real-world experience in top tech companies.</p>
-                </div>
-                
+                </div>               
                 <div class="feature-box p-8 rounded-2xl transition-transform duration-300 hover:-translate-y-2">
                     <div class="w-14 h-14 rounded-full bg-purple-900/50 flex items-center justify-center mb-6 text-purple-400 text-2xl">
                         <i class="fas fa-certificate"></i>
@@ -141,7 +123,6 @@ $user_id = $_SESSION['user_id'] ?? 0;
             </div>
         </div>
     </section>
-
     <section id="courses" class="py-20 bg-[#0f0f12]">
         <div class="container mx-auto px-6">
             <div class="flex justify-between items-end mb-12">
@@ -153,12 +134,9 @@ $user_id = $_SESSION['user_id'] ?? 0;
                     View All <i class="fas fa-arrow-right ml-2"></i>
                 </a>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <?php
-             
-                $select_products = mysqli_query($conn, "SELECT p.*, i.name as instructor_name FROM `products` p LEFT JOIN `course_activity` ca ON p.id = ca.course_id LEFT JOIN `instructors` i ON ca.instructor_id = i.id LIMIT 3");
-                
+                $select_products = mysqli_query($conn, "SELECT p.*, i.name as instructor_name FROM `products` p LEFT JOIN `course_activity` ca ON p.id = ca.course_id LEFT JOIN `instructors` i ON ca.instructor_id = i.id LIMIT 3");             
                 if($select_products && mysqli_num_rows($select_products) > 0){
                     while($row = mysqli_fetch_assoc($select_products)){
                 ?>
@@ -177,12 +155,10 @@ $user_id = $_SESSION['user_id'] ?? 0;
                             </div>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-2 line-clamp-1 group-hover:text-indigo-400 transition-colors"><?php echo htmlspecialchars($row['name']); ?></h3>
-                        <p class="text-gray-400 text-sm mb-6 flex-1 line-clamp-2"><?php echo htmlspecialchars($row['description']); ?></p>
-                        
+                        <p class="text-gray-400 text-sm mb-6 flex-1 line-clamp-2"><?php echo htmlspecialchars($row['description']); ?></p>                        
                         <div class="flex items-center text-sm text-gray-500 mb-6 space-x-4">
                             <span class="flex items-center"><i class="fas fa-user mr-2"></i> <?php echo !empty($row['instructor_name']) ? htmlspecialchars($row['instructor_name']) : 'Expert'; ?></span>
                         </div>
-
                         <div class="flex items-center justify-between mt-auto pt-4 border-t border-white/10">
                             <span class="text-2xl font-black text-white">৳<?php echo htmlspecialchars($row['price']); ?></span>
                             <?php if (isset($_SESSION['user_name'])): ?>
@@ -208,7 +184,6 @@ $user_id = $_SESSION['user_id'] ?? 0;
             </div>
         </div>
     </section>
-
     <section class="py-20 relative overflow-hidden">
         <div class="absolute inset-0 bg-indigo-900 z-0"></div>
         <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 z-0"></div>
@@ -216,8 +191,7 @@ $user_id = $_SESSION['user_id'] ?? 0;
         <div class="container mx-auto px-6 relative z-10">
             <div class="max-w-4xl mx-auto text-center bg-black/40 backdrop-blur-md border border-white/10 p-10 md:p-16 rounded-3xl shadow-2xl">
                 <h2 class="text-3xl md:text-2xl font-bold text-white mb-6">Ready to start learning?</h2>
-                <p class="text-lg text-indigo-200 mb-10 max-w-2xl mx-auto">Join thousands of students from around the world who are advancing their careers with our platform.</p>
-                
+                <p class="text-lg text-indigo-200 mb-10 max-w-2xl mx-auto">Join thousands of students from around the world who are advancing their careers with our platform.</p>               
                 <?php if (!isset($_SESSION['user_name']) && !isset($_SESSION['admin_name']) && !isset($_SESSION['instructor_name'])): ?>
                     <a href="register_form.php" class="inline-block bg-white text-indigo-900 font-black text-lg py-4 px-10 rounded-full hover:bg-indigo-50 transition transform hover:-translate-y-1 shadow-lg">
                         Get Started Now
@@ -230,7 +204,6 @@ $user_id = $_SESSION['user_id'] ?? 0;
             </div>
         </div>
     </section>
-
     <footer class="bg-black pt-20 pb-10 border-t border-white/5">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
@@ -245,6 +218,12 @@ $user_id = $_SESSION['user_id'] ?? 0;
                         <li><a href="course-page.php" class="hover:text-indigo-400 transition">Courses</a></li>
                         <li><a href="instructors.php" class="hover:text-indigo-400 transition">Instructors</a></li>
                         <li><a href="contact.php" class="hover:text-indigo-400 transition">Contact Support</a></li>
+						 <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white transition"><i class="fab fa-facebook text-xl"></i></a>
+                    <a href="#" class="hover:text-white transition"><i class="fab fa-twitter text-xl"></i></a>
+                    <a href="#" class="hover:text-white transition"><i class="fab fa-linkedin text-xl"></i></a>
+                    <a href="#" class="hover:text-white transition"><i class="fab fa-youtube text-xl"></i></a>
+                </div>						
                     </ul>
                 </div>
                 <div>
@@ -252,23 +231,17 @@ $user_id = $_SESSION['user_id'] ?? 0;
                     <ul class="space-y-3 text-gray-400">
                         <li><a href="#" class="hover:text-indigo-400 transition">Terms of Service</a></li>
                         <li><a href="#" class="hover:text-indigo-400 transition">Privacy Policy</a></li>
+						
                     </ul>
                 </div>
-            </div>
-            
+            </div>           
              <div class="border-t border-slate-800 py-6 text-center text-sm text-gray-500">
                 <p>&copy; <?php echo date("Y");?> BOT Learning. All Rights Reserved.</p>
             
-                <div class="flex space-x-6 mt-4 md:mt-0">
-                    <a href="#" class="hover:text-white transition"><i class="fab fa-facebook text-xl"></i></a>
-                    <a href="#" class="hover:text-white transition"><i class="fab fa-twitter text-xl"></i></a>
-                    <a href="#" class="hover:text-white transition"><i class="fab fa-linkedin text-xl"></i></a>
-                    <a href="#" class="hover:text-white transition"><i class="fab fa-youtube text-xl"></i></a>
-                </div>
+               
             </div>
         </div>
     </footer>
-
     <script>
         window.addEventListener('scroll', function() {
             const nav = document.querySelector('nav');
