@@ -1,13 +1,8 @@
 <?php
-// FILE: Instructors.php
 @include 'config.php';
-
-// Start session if not already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
-// Fetch instructors from database
 $select_instructors = mysqli_query($conn, "SELECT * FROM `instructors`") or die('Query failed: ' . mysqli_error($conn));
 ?>
 
