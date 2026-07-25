@@ -87,7 +87,7 @@
       <sub>Add and manage course instructors</sub>
     </td>
     <td align="center" width="50%">
-      <img src="screenshots/instructors_page.png" alt="Instructors Page" width="100%"/>
+      <img src="screenshots/localhost_Finalls_add_instructor.php.png" alt="Instructors Page" width="100%"/>
       <br/><b>Public Instructors Page</b><br/>
       <sub>Browse all expert instructors</sub>
     </td>
