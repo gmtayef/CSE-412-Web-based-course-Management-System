@@ -53,11 +53,11 @@
 <table>
   <tr>
     <td align="center" width="50%">
-      <img src="screenshots/login.png" alt="Login Page" width="100%"/>
+      <img src="screenshots/Screenshot%202026-04-20%20204834.png" alt="Login Page" width="100%"/>
       <br/><b>Login Page</b>
     </td>
     <td align="center" width="50%">
-      <img src="screenshots/register.png" alt="Registration Page" width="100%"/>
+      <img src="screenshots/localhost_Finalls_register_form.php.png" alt="Registration Page" width="100%"/>
       <br/><b>Register / Sign Up</b>
     </td>
   </tr>
@@ -70,24 +70,24 @@
 <table>
   <tr>
     <td align="center" width="50%">
-      <img src="screenshots/admin_dashboard.png" alt="Admin Dashboard" width="100%"/>
+      <img src="screenshots/localhost_Finalls_admin_panel.php.png" alt="Admin Dashboard" width="100%"/>
       <br/><b>Admin Overview Dashboard</b><br/>
       <sub>Approve enrollments and manage the platform</sub>
     </td>
     <td align="center" width="50%">
-      <img src="screenshots/admin_manage_courses.png" alt="Manage Courses" width="100%"/>
+      <img src="screenshots/localhost_Finalls_admin.php.png" alt="Manage Courses" width="100%"/>
       <br/><b>Manage Courses</b><br/>
       <sub>Publish new courses, view active courses & instructors</sub>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="screenshots/admin_add_instructor.png" alt="Add Instructor" width="100%"/>
+      <img src="screenshots/localhost_Finalls_add_instructor.php.png" alt="Add Instructor" width="100%"/>
       <br/><b>Instructor Management</b><br/>
       <sub>Add and manage course instructors</sub>
     </td>
     <td align="center" width="50%">
-      <img src="screenshots/localhost_Finalls_add_instructor.php.png" alt="Instructors Page" width="100%"/>
+      <img src="screenshots/localhost_Finalls_instructors.php.png" alt="Instructors Page" width="100%"/>
       <br/><b>Public Instructors Page</b><br/>
       <sub>Browse all expert instructors</sub>
     </td>
@@ -101,31 +101,31 @@
 <table>
   <tr>
     <td align="center" width="50%">
-      <img src="screenshots/instructor_dashboard.png" alt="Instructor Dashboard" width="100%"/>
+      <img src="screenshots/localhost_Finalls_instructor_panel.php.png" alt="Instructor Dashboard" width="100%"/>
       <br/><b>Instructor Dashboard</b><br/>
       <sub>Active courses & enrolled student overview</sub>
     </td>
     <td align="center" width="50%">
-      <img src="screenshots/instructor_manage_content.png" alt="Manage Content" width="100%"/>
+      <img src="screenshots/localhost_Finalls_instructor_panel.php_tab%3Dcourses.png" alt="Manage Content" width="100%"/>
       <br/><b>Manage Content</b><br/>
       <sub>Upload video lessons or attach YouTube links</sub>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="screenshots/instructor_assignments.png" alt="Assignments Setup" width="100%"/>
+      <img src="screenshots/localhost_Finalls_instructor_panel.php_tab%3Dassignments.png" alt="Assignments Setup" width="100%"/>
       <br/><b>Assignments Setup</b><br/>
       <sub>Create tasks with due dates and guidelines</sub>
     </td>
     <td align="center" width="50%">
-      <img src="screenshots/instructor_grading.png" alt="Grade Submissions" width="100%"/>
+      <img src="screenshots/localhost_Finalls_instructor_panel.php_tab%3Dgrading.png" alt="Grade Submissions" width="100%"/>
       <br/><b>Grade Submissions</b><br/>
       <sub>Review student work and issue grades with feedback</sub>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="screenshots/instructor_progress.png" alt="Student Progress Tracker" width="50%"/>
+      <img src="screenshots/localhost_Finalls_instructor_panel.php_tab%3Dprogress.png" alt="Student Progress Tracker" width="50%"/>
       <br/><b>Student Progress Tracker</b><br/>
       <sub>Monitor video completion rates and assignment status per student</sub>
     </td>
@@ -139,24 +139,24 @@
 <table>
   <tr>
     <td align="center" width="50%">
-      <img src="screenshots/student_dashboard.png" alt="Student Dashboard" width="100%"/>
+      <img src="screenshots/localhost_Finalls_student_panel.php.png" alt="Student Dashboard" width="100%"/>
       <br/><b>Student Dashboard</b><br/>
       <sub>Track enrolled courses, completions & certificates</sub>
     </td>
     <td align="center" width="50%">
-      <img src="screenshots/student_explore.png" alt="Explore Courses" width="100%"/>
+      <img src="screenshots/localhost_Finalls_explore_courses.php.png" alt="Explore Courses" width="100%"/>
       <br/><b>Explore Courses</b><br/>
       <sub>Discover and enroll in new courses</sub>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="screenshots/student_assignments.png" alt="My Assignments" width="100%"/>
+      <img src="screenshots/localhost_Finalls_assignments.php.png" alt="My Assignments" width="100%"/>
       <br/><b>My Assignments</b><br/>
       <sub>Submit work and track review status</sub>
     </td>
     <td align="center" width="50%">
-      <img src="screenshots/cart.png" alt="Shopping Cart" width="100%"/>
+      <img src="screenshots/localhost_Finalls_cart.php.png" alt="Shopping Cart" width="100%"/>
       <br/><b>Shopping Cart</b><br/>
       <sub>Review selected courses before checkout</sub>
     </td>
@@ -170,23 +170,17 @@
 <table>
   <tr>
     <td align="center" width="50%">
-      <img src="screenshots/course_listing.png" alt="Course Listing" width="100%"/>
+      <img src="screenshots/localhost_Finalls_course-page.php.png" alt="Course Listing" width="100%"/>
       <br/><b>Course Listing Page</b><br/>
       <sub>Browse all available courses with pricing</sub>
     </td>
     <td align="center" width="50%">
-      <img src="screenshots/certificate.png" alt="Certificate of Excellence" width="100%"/>
+      <img src="screenshots/localhost_Finalls_generate_certificate.php_course_id%3D18.png" alt="Certificate of Excellence" width="100%"/>
       <br/><b>Certificate of Excellence</b><br/>
       <sub>Downloadable & printable PDF certificate on completion</sub>
     </td>
   </tr>
 </table>
-
----
-
-> 📁 **Setup screenshots:** Create a `/screenshots` folder in the repository root and add the images with these exact filenames:
->
-> `login.png` · `register.png` · `admin_dashboard.png` · `admin_manage_courses.png` · `admin_add_instructor.png` · `instructors_page.png` · `instructor_dashboard.png` · `instructor_manage_content.png` · `instructor_assignments.png` · `instructor_grading.png` · `instructor_progress.png` · `student_dashboard.png` · `student_explore.png` · `student_assignments.png` · `cart.png` · `course_listing.png` · `certificate.png`
 
 ---
 
@@ -315,7 +309,7 @@
 ├── 🗃️ DATABASE
 │   └── course1_db.sql             # Full MySQL schema + seed data
 │
-└── 📁 screenshots/                # ← Add your screenshots here
+└── 📁 screenshots/                # App screenshots used in this README
 ```
 
 ---
